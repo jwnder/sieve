@@ -12,7 +12,7 @@ class Form extends Component {
       result : '',
       indexNumber : '',
       errorIndexNumber: null,
-      errorForm: null,
+      errorForm: '',
       validIndexNumber: true
     }
     
@@ -22,7 +22,7 @@ class Form extends Component {
   //Update index value
   onChange = e => {
     const value = e.target.value;
-    this.setState({ errorForm: null });
+    this.setState({ errorForm: '' });
     this.setState({ indexNumber: value },
         () => this.validateIndexNumber(value));
   };
@@ -47,6 +47,7 @@ class Form extends Component {
     })
     .then(response => {
       this.setState({ result: JSON.stringify(response.data) })
+      this.setState({ errorForm: '' });
     })
     .catch(err => {
       this.setState({ errorForm: err.toString() })
@@ -63,14 +64,15 @@ class Form extends Component {
         <form>
           <div className="col-md-8 m-auto">
             <div className="display-4 text-center"><h1>Enter your index value</h1></div>
-            {this.state.errorForm !== null? <div className='alert alert-danger' dismissible>{this.state.errorForm}</div> : ''}
+            {this.state.errorForm.length > 0? 
+              <div className='alert alert-danger' dismissible>{this.state.errorForm}</div> : ''}
             <div className="input-group mb-3">
               <input
                 className={`form-control form-control-lg ${this.classesErrorIndexNumber()}`}
                 placeholder='Type a number'
                 onChange={this.onChange}
               />
-            <div className='invalid-feedback'>{this.state.error}</div>
+            <div className='invalid-feedback'>{this.state.errorIndexNumber}</div>
             </div>
             <button
               className="btn btn-info btn-block mt-4"
